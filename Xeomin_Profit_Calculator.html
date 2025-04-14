@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xeomin Profit Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em;
+      max-width: 600px;
+    }
+    input, select {
+      padding: 0.5em;
+      margin: 0.5em 0;
+      width: 100%;
+      font-size: 1em;
+    }
+    .result {
+      background-color: #f3f3f3;
+      padding: 1em;
+      margin-top: 1em;
+      border-left: 4px solid #3c9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Xeomin Profit Calculator</h1>
+  <label>Units Purchased by Patient:</label>
+  <input type="number" id="units" value="50" min="1" />
+
+  <label>Price per Unit ($):</label>
+  <input type="number" id="pricePerUnit" value="13" min="1" step="0.01" />
+
+  <label>Vial Type:</label>
+  <select id="vialType">
+    <option value="100">100-unit vial ($511)</option>
+    <option value="50">50-unit vial ($268)</option>
+  </select>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    const nsCost = 24.22;
+    const syringeCost = 34;
+
+    function calculate() {
+      const units = parseFloat(document.getElementById('units').value);
+      const pricePerUnit = parseFloat(document.getElementById('pricePerUnit').value);
+      const vialType = parseInt(document.getElementById('vialType').value);
+      const vialCost = vialType === 100 ? 511 : 268;
+
+      const totalRevenue = units * pricePerUnit;
+      const totalCost = vialCost + nsCost + syringeCost;
+      const profit = totalRevenue - totalCost;
+
+      document.getElementById('result').innerHTML = `
+        <strong>Total Revenue:</strong> $${totalRevenue.toFixed(2)}<br/>
+        <strong>Total Cost (Vial + NS + Syringes):</strong> $${totalCost.toFixed(2)}<br/>
+        <strong>Profit:</strong> $${profit.toFixed(2)}
+      `;
+    }
+
+    document.getElementById('units').addEventListener('input', calculate);
+    document.getElementById('pricePerUnit').addEventListener('input', calculate);
+    document.getElementById('vialType').addEventListener('change', calculate);
+
+    calculate(); // Initial run
+  </script>
+</body>
+</html>
